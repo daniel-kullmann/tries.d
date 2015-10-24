@@ -139,9 +139,27 @@ unittest {
         foreach (line; lines) {
             assert(trie.check(line));
         }
-        assert(!trie.check("Daniel Kullmann"));
-        writeln(trie.size());
     }
 
+    if (exists("/usr/share/dict/cracklib-small")) {
+        writeln("Testing many words (2)");
+        File file = File("/usr/share/dict/cracklib-small", "r");
+        string[] lines;
+        while (!file.eof()) {
+            string line = chomp(file.readln());
+            if (line != "") {
+                lines.length += 1;
+                lines[lines.length-1] = line;
+                trie.add(line);
+            }
+        }
+
+        foreach (line; lines) {
+            assert(trie.check(line));
+        }
+    }
+
+    assert(!trie.check("Daniel Kullmann"));
+    writeln(trie.size());
 }
 
