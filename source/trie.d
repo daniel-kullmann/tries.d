@@ -21,13 +21,18 @@ class Trie {
 
     void add(string str) {
         if (str == "") {
-            throw new Exception("Can't add empty string to trie");
+            root.leaf = true;
+        } else {
+            add(&root, str, 0);
         }
-        add(&root, str, 0);
     }
 
     bool check(string str) {
-        return check(root, str, 0);
+        if (str == "") {
+            return root.leaf;
+        } else {
+            return check(root, str, 0);
+        }
     }
 
     uint size() {
