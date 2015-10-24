@@ -4,21 +4,17 @@ import std.exception;
 struct Item {
     dchar character;
     bool leaf;
-    Node children;
+    Item[] children;
 
     this(dchar character, bool leaf) {
         this.character = character;
         this.leaf = leaf;
-        this.children = Node();
+        this.children = [];
     }
 };
 
-struct Node {
-    Item[] items;
-};
-
 class Trie {
-    Node root;
+    Item root = Item('0', false);
 
     this() {
     }
@@ -39,43 +35,43 @@ class Trie {
     }
 
     private {
-        void add(Node* node, string str, uint index) {
+        void add(Item* item, string str, uint index) {
             dchar character = str[index];
             bool lastCharacter = index == str.length-1;
-            foreach (ref item; node.items) {
-                if (item.character == character) {
+            foreach (ref child; item.children) {
+                if (child.character == character) {
                     if (lastCharacter) {
-                        item.leaf = true;
+                        child.leaf = true;
                     } else {
-                        add(&item.children, str, index+1);
+                        add(&child, str, index+1);
                     }
                     return;
                 }
             }
             // no entry found; create new one
-            node.items.length += 1;
-            node.items[node.items.length-1] = Item(character, lastCharacter);
+            item.children.length += 1;
+            item.children[item.children.length-1] = Item(character, lastCharacter);
             if (!lastCharacter) {
-                add(&node.items[node.items.length-1].children, str, index+1);
+                add(&item.children[item.children.length-1], str, index+1);
             }
         }
 
-        bool check(Node node, string str, uint index) {
+        bool check(Item item, string str, uint index) {
             dchar character = str[index];
             bool lastCharacter = index == str.length-1;
-            foreach (ref item; node.items) {
-                if (item.character == character) {
+            foreach (ref child; item.children) {
+                if (child.character == character) {
                     if (lastCharacter) {
-                        return item.leaf;
+                        return child.leaf;
                     } else {
-                        return check(item.children, str, index+1);
+                        return check(child, str, index+1);
                     }
                 }
             }
             return false;
         }
 
-        uint size(Node node) {
+        uint size(Item item) {
             // TODO
             return -1;
         }
