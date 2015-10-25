@@ -40,8 +40,8 @@ class Trie {
         return length(root);
     }
 
-    void leafWalker(void delegate(string value) func) {
-        leafWalker(root, "", func);
+    void walker(void delegate(string value) func) {
+        walker(root, "", func);
     }
 
     private {
@@ -93,12 +93,12 @@ class Trie {
             return result;
         }
     
-        void leafWalker(Item item, string partialValue, void delegate(string value) func) {
+        void walker(Item item, string partialValue, void delegate(string value) func) {
             if (item.leaf) {
                 func(partialValue);
             }
             foreach (ref child; item.children) {
-                leafWalker(child, partialValue ~ to!string(child.character), func);
+                walker(child, partialValue ~ to!string(child.character), func);
             }
 
 
@@ -116,7 +116,7 @@ unittest {
     trie.add("abcd");
     uint numberOfEntries = 0;
     bool correctEntry = true;
-    trie.leafWalker(delegate (string value) { 
+    trie.walker(delegate (string value) { 
         numberOfEntries += 1; 
         if (value != "abcd") {
             correctEntry = false;
@@ -190,7 +190,7 @@ unittest {
     writeln(trie.length());
 
     uint count = 0;
-    trie.leafWalker(delegate (string value) { count += 1; });
+    trie.walker(delegate (string value) { count += 1; });
     assert(count == trie.length());
 
 }
