@@ -1,5 +1,6 @@
 import std.stdio;
 import std.exception;
+import std.conv;
 
 struct Item {
     dchar character;
@@ -35,8 +36,12 @@ class Trie {
         }
     }
 
-    uint size() {
-        return size(root);
+    uint length() {
+        return length(root);
+    }
+
+    void leafWalker(void delegate(string value) func) {
+        leafWalker(root, "", func);
     }
 
     private {
@@ -76,16 +81,27 @@ class Trie {
             return false;
         }
 
-        uint size(Item item) {
+        uint length(Item item) {
             // TODO
             uint result = 0;
             if (item.leaf) {
                 result += 1;
             }
             foreach (ref child; item.children) {
-                result += size(child);
+                result += length(child);
             }
             return result;
+        }
+    
+        void leafWalker(Item item, string partialValue, void delegate(string value) func) {
+            if (item.leaf) {
+                func(partialValue);
+            }
+            foreach (ref child; item.children) {
+                leafWalker(child, partialValue ~ to!string(child.character), func);
+            }
+
+
         }
     }
 };
@@ -94,16 +110,27 @@ unittest {
 
     auto trie = new Trie();
 
-    assert(trie.size() == 0);
+    assert(trie.length() == 0);
     assert(!trie.check("a"));
     
     trie.add("abcd");
+    uint numberOfEntries = 0;
+    bool correctEntry = true;
+    trie.leafWalker(delegate (string value) { 
+        numberOfEntries += 1; 
+        if (value != "abcd") {
+            correctEntry = false;
+        }
+    });
+    assert(numberOfEntries == 1);
+    assert(correctEntry);
+
     assert(trie.check("abcd"));
     assert(!trie.check("a"));
 
     trie.add("a");
     assert(trie.check("a"));
-    assert(trie.size() == 2);
+    assert(trie.length() == 2);
     
     trie.add("a");
     trie.add("a");
@@ -160,6 +187,11 @@ unittest {
     }
 
     assert(!trie.check("Daniel Kullmann"));
-    writeln(trie.size());
+    writeln(trie.length());
+
+    uint count = 0;
+    trie.leafWalker(delegate (string value) { count += 1; });
+    assert(count == trie.length());
+
 }
 
