@@ -88,7 +88,7 @@ class DataTrie(T) {
                         return check(child, str, index+1);
                     }
                 }
-                return false;
+                return T.init;
             }
         }
 
@@ -203,6 +203,7 @@ unittest {
     }
 
     assert(!trie.check("Daniel Kullmann"));
+    assert(trie.get("Daniel Kullmann") == uint.init);
     writeln(trie.length());
 
     uint count = 0;
