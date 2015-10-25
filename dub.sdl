@@ -1,4 +1,4 @@
-name "first-d-project"
-description "A minimal D application."
-copyright "Copyright © 2015, devuser"
-authors "devuser"
+name "tries.d"
+description "Simple tries implementation."
+copyright "Copyright © 2015, Daniel Kullmann <daniel.kullmann@gmx.de>"
+authors "Daniel Kullmann <daniel.kullmann@gmx.de>"
