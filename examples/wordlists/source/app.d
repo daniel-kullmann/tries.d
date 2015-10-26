@@ -61,6 +61,17 @@ void testWordFile(Trie trie, string filename, uint multiples) {
         sw.stop();
         writeln("Checked ", trie.length, " items in ", sw.peek().msecs, " ms; ", 
                 1000 * to!double(sw.peek().msecs) / to!double(trie.length), " us/item");
+
+        foreach (line; lines) {
+           trie.remove(line);
+        }
+        sw.stop();
+        writeln("Removed ", lines.length, " items again in ", sw.peek().msecs, " ms; ", 
+                1000 * to!double(sw.peek().msecs) / to!double(lines.length), " us/item");
+
+        foreach (line; lines) {
+            assert(!trie.check(line));
+        }
     }
 }
 
