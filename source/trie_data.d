@@ -2,20 +2,21 @@ import std.stdio;
 import std.exception;
 import std.conv;
 
-struct Item(T) {
-    dchar character;
-    bool leaf;
-    T value;
-    Item[] children;
-
-    this(dchar character, bool leaf) {
-        this.character = character;
-        this.leaf = leaf;
-        this.children = [];
-    }
-};
-
 class DataTrie(T) {
+
+    struct Item(T) {
+        dchar character;
+        bool leaf;
+        T value;
+        Item[] children;
+
+        this(dchar character, bool leaf) {
+            this.character = character;
+            this.leaf = leaf;
+            this.children = [];
+        }
+    };
+
     Item!T root = Item!T('0', false);
 
     this() {
@@ -167,7 +168,6 @@ unittest {
     import std.string;
 
     if (exists("/usr/share/dict/words")) {
-        writeln("Testing many words");
         File file = File("/usr/share/dict/words", "r");
         string[] lines;
         while (!file.eof()) {
@@ -185,7 +185,6 @@ unittest {
     }
 
     if (exists("/usr/share/dict/cracklib-small")) {
-        writeln("Testing many words (2)");
         File file = File("/usr/share/dict/cracklib-small", "r");
         string[] lines;
         while (!file.eof()) {
@@ -204,7 +203,6 @@ unittest {
 
     assert(!trie.check("Daniel Kullmann"));
     assert(trie.get("Daniel Kullmann") == uint.init);
-    writeln(trie.length());
 
     uint count = 0;
     trie.walker(delegate (string name, int value) { count += 1; });

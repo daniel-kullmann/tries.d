@@ -1,4 +1,4 @@
-name "tries.d"
+name "tries"
 description "Simple tries implementation."
 copyright "Copyright © 2015, Daniel Kullmann <daniel.kullmann@gmx.de>"
 authors "Daniel Kullmann <daniel.kullmann@gmx.de>"
