@@ -30,15 +30,15 @@ class Trie {
     }
 
     bool check(string str) {
-        return check(root, str, 0);
+        return check(&root, str, 0);
     }
 
     uint length() {
-        return length(root);
+        return length(&root);
     }
 
     void walker(void delegate(string value) func) {
-        walker(root, "", func);
+        walker(&root, "", func);
     }
 
     private {
@@ -83,7 +83,7 @@ class Trie {
             }
         }
 
-        bool check(Item item, string str, uint index) {
+        bool check(Item* item, string str, uint index) {
             bool isLastCharacter = index == str.length;
             if (isLastCharacter) {
                 return item.leaf;
@@ -91,31 +91,31 @@ class Trie {
                 dchar character = str[index];
                 foreach (ref child; item.children) {
                     if (child.character == character) {
-                        return check(child, str, index+1);
+                        return check(&child, str, index+1);
                     }
                 }
                 return false;
             }
         }
 
-        uint length(Item item) {
+        uint length(Item* item) {
             // TODO
             uint result = 0;
             if (item.leaf) {
                 result += 1;
             }
             foreach (ref child; item.children) {
-                result += length(child);
+                result += length(&child);
             }
             return result;
         }
     
-        void walker(Item item, string partialValue, void delegate(string value) func) {
+        void walker(Item* item, string partialValue, void delegate(string value) func) {
             if (item.leaf) {
                 func(partialValue);
             }
             foreach (ref child; item.children) {
-                walker(child, partialValue ~ to!string(child.character), func);
+                walker(&child, partialValue ~ to!string(child.character), func);
             }
 
 

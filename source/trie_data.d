@@ -31,19 +31,19 @@ class DataTrie(T) {
     }
 
     bool check(string str) {
-        return check(root, str, 0);
+        return check(&root, str, 0);
     }
 
     uint length() {
-        return length(root);
+        return length(&root);
     }
 
     T get(string str) {
-        return get(root, str, 0);
+        return get(&root, str, 0);
     }
 
     void walker(void delegate(string name, T value) func) {
-        walker(root, "", func);
+        walker(&root, "", func);
     }
 
     private {
@@ -90,7 +90,7 @@ class DataTrie(T) {
             }
         }
 
-        bool check(Item!T item, string str, uint index) {
+        bool check(Item!T* item, string str, uint index) {
             bool isLastCharacter = index == str.length;
             if (isLastCharacter) {
                 return item.leaf;
@@ -98,14 +98,14 @@ class DataTrie(T) {
                 dchar character = str[index];
                 foreach (ref child; item.children) {
                     if (child.character == character) {
-                        return check(child, str, index+1);
+                        return check(&child, str, index+1);
                     }
                 }
                 return false;
             }
         }
 
-        T get(Item!T item, string str, uint index) {
+        T get(Item!T* item, string str, uint index) {
             bool isLastCharacter = index == str.length;
             if (isLastCharacter) {
                 return item.value;
@@ -113,31 +113,31 @@ class DataTrie(T) {
                 dchar character = str[index];
                 foreach (ref child; item.children) {
                     if (child.character == character) {
-                        return get(child, str, index+1);
+                        return get(&child, str, index+1);
                     }
                 }
                 return T.init;
             }
         }
 
-        uint length(Item!T item) {
+        uint length(Item!T* item) {
             // TODO
             uint result = 0;
             if (item.leaf) {
                 result += 1;
             }
             foreach (ref child; item.children) {
-                result += length(child);
+                result += length(&child);
             }
             return result;
         }
     
-        void walker(Item!T item, string partialValue, void delegate(string value, T value) func) {
+        void walker(Item!T* item, string partialValue, void delegate(string value, T value) func) {
             if (item.leaf) {
                 func(partialValue, item.value);
             }
             foreach (ref child; item.children) {
-                walker(child, partialValue ~ to!string(child.character), func);
+                walker(&child, partialValue ~ to!string(child.character), func);
             }
 
 
