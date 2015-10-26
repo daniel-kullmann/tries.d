@@ -1,0 +1,9 @@
+name "tries-example-wordlist"
+description "Shows usage of tries with word list files"
+targetType "executable"
+homepage "https://github.com/daniel-kullmann/tries.d"
+license "BSD 3-clause"
+copyright "Copyright © 2015, Daniel Kullmann <daniel.kullmann@gmx.de>"
+authors "Daniel Kullmann <daniel.kullmann@gmx.de>"
+
+dependency "tries" version="*" path="../.."
