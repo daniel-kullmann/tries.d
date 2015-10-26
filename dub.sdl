@@ -1,4 +1,7 @@
 name "tries"
 description "Simple tries implementation."
+targetType "library"
+homepage "https://github.com/daniel-kullmann/tries.d"
+license "BSD 3-clause"
 copyright "Copyright © 2015, Daniel Kullmann <daniel.kullmann@gmx.de>"
 authors "Daniel Kullmann <daniel.kullmann@gmx.de>"
