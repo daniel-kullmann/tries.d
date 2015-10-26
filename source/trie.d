@@ -25,6 +25,10 @@ class Trie {
         add(&root, str, 0);
     }
 
+    void remove(string str) {
+        remove(&root, str, 0);
+    }
+
     bool check(string str) {
         return check(root, str, 0);
     }
@@ -54,6 +58,28 @@ class Trie {
                 item.children.length += 1;
                 item.children[item.children.length-1] = Item(character, isLastCharacter);
                 add(&item.children[item.children.length-1], str, index+1);
+            }
+        }
+
+        bool remove(Item* item, string str, uint index) {
+            bool isLastCharacter = index == str.length;
+            if (isLastCharacter) {
+                item.leaf = false;
+                return item.children.length == 0;
+            } else {
+                dchar character = str[index];
+                foreach (idx, ref child; item.children) {
+                    if (child.character == character) {
+                        bool result = remove(&child, str, index+1);
+                        if (result) {
+                            // delete child node
+                            item.children[idx] = item.children[item.children.length-1];
+                            item.children.length -= 1;
+                        }
+                        return item.children.length == 0;
+                    }
+                }
+                return false;
             }
         }
 
@@ -181,5 +207,12 @@ unittest {
     trie.walker(delegate (string value) { count += 1; });
     assert(count == trie.length());
 
+    count = trie.length();
+    trie.add("todelete");
+    assert(trie.check("todelete"));
+    assert(count+1 == trie.length());
+    trie.remove("todelete");
+    assert(!trie.check("todelete"));
+    assert(count == trie.length());
 }
 
