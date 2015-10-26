@@ -38,7 +38,7 @@ class DataTrie(T) {
         return get(root, str, 0);
     }
 
-    void walker(void delegate(string name, int value) func) {
+    void walker(void delegate(string name, T value) func) {
         walker(root, "", func);
     }
 
@@ -81,12 +81,12 @@ class DataTrie(T) {
         T get(Item!T item, string str, uint index) {
             bool isLastCharacter = index == str.length;
             if (isLastCharacter) {
-                return item.leaf;
+                return item.value;
             } else {
                 dchar character = str[index];
                 foreach (ref child; item.children) {
                     if (child.character == character) {
-                        return check(child, str, index+1);
+                        return get(child, str, index+1);
                     }
                 }
                 return T.init;
