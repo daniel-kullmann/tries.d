@@ -62,6 +62,12 @@ void testWordFile(Trie trie, string filename, uint multiples) {
         writeln("Checked ", trie.length, " items in ", sw.peek().msecs, " ms; ", 
                 1000 * to!double(sw.peek().msecs) / to!double(trie.length), " us/item");
 
+        uint count = 0;
+        trie.walker(delegate(string name, string value) {
+            count += name.length;
+        });
+        writeln("Trie stores strings of length " ~ to!string(count) ~ "");
+
         foreach (line; lines) {
            trie.remove(line);
         }
