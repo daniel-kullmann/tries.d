@@ -13,7 +13,7 @@ class DataTrie(T) {
         this(dchar character, bool leaf) {
             this.character = character;
             this.leaf = leaf;
-            this.children = [];
+            //this.children.reserve(26);
         }
     };
 
